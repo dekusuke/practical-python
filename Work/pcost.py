@@ -1,19 +1,28 @@
+import csv
+import sys
+
 def portfolio_cost(filename):
+    
+    f = open('Data/portfolio.csv')
+    rows = csv.reader(f)
+    headers = next(rows)
+    total = 0
+    for row in rows:
+        cost = int(row[1]) * float(row[2])
+        total = total + cost
+        
+    return total
+    f.close()
+    
+if len(sys.argv) == 2:
+    filename = sys.argv[1]
+else:
+    filename = 'Data/portfolio.csv'
 
-    with open('Data/missing.csv', 'rt') as f:
-        headers = next(f)
-        total = 0
-        try:
-            for line in f:
-                row = line.split(',')
-                number = int(row[1])
-                price = float(row[2])
-                cost = number * price
-                total = total + cost
-            return total
-        except ValueError:
-            print('something is missing')
+cost = portfolio_cost(filename)
+print('Total cost:', cost)
 
+        
 
-cost2 = portfolio_cost('Data/missing.csv')
-print('Total cost:', cost2)
+    
+
