@@ -3,7 +3,7 @@ import sys
 
 def read_portfolio(filename):
     
-    f = open('Data/portfolio.csv')
+    f = open(filename)
     rows = csv.reader(f)
     headers = next(rows)
     portfolio = []
@@ -16,7 +16,7 @@ def read_portfolio(filename):
 
 def read_prices(filename):
     prices = {}
-    f = open('Data/prices.csv')
+    f = open(filename)
     rows = csv.reader(f)
     try:
         for row in rows:
@@ -27,6 +27,13 @@ def read_prices(filename):
     return prices
     f.close()
 
+def make_report(list_port, dic_pri):
+    report = []
+    for dic in list_port:
+        add = (dic['name'], dic['shares'], dic_pri[dic['name']], dic_pri[dic['name']] - dic['price'])
+        report.append(add)
+
+    return report
 
 portfolio = read_portfolio('Data/portfolio.csv')
 prices = read_prices('Data/prices.csv')
