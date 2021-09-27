@@ -37,17 +37,16 @@ def make_report(list_port, dic_pri):
 
 portfolio = read_portfolio('Data/portfolio.csv')
 prices = read_prices('Data/prices.csv')
-total1 = 0
-total2 = 0
+report = make_report(portfolio, prices)
+headers = ('Name', 'Shares', 'Price', 'Change')
 
-for s in portfolio:
-    total1 += s['shares'] * s['price']
-    total2 += s['shares'] * prices[s['name']]
+print('%10s %10s %10s %10s' % headers)
+print(('-' * 10 + ' ') * len(headers))
+    
 
-
-print('before', total1)
-print('after', total2)
-print('gain/loss', total1-total2)
+for name, shares, price, change in report:
+    price = '$' + str(price)
+    print(f'{name:>10s} {shares:>10d} {price:>10s} {change:>10.2f}')
 
 
 
