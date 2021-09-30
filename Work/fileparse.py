@@ -4,18 +4,18 @@ def parse_csv(filename, select=None, types=None, has_headers=None, delimiter=Non
     '''
     Parse a CSV file into a list of records
     '''
-    with open(filename) as f:
-        if delimiter:            
-            rows = csv.reader(f, delimiter=' ')
-            records = []
-            if has_headers:
-                headers = next(rows)
-                if select:
-                    indices = [headers.index(colname) for colname in select]
-                    headers = select
-                else:
-                    indices = []
-                for row in rows:
+    with open(filename) as f:                        
+        rows = csv.reader(f)
+        records = []            
+        if has_headers:
+            headers = next(rows)
+            if select:
+                indices = [headers.index(colname) for colname in select]
+                headers = select
+            else:
+                indices = []
+            for i, row in enumerate(rows, start=1):
+                try:
                     if not row:
                         continue
                     if indices:
@@ -24,17 +24,18 @@ def parse_csv(filename, select=None, types=None, has_headers=None, delimiter=Non
                             row = [func(val) for func, val in zip(types, row)]
                     record = dict(zip(headers, row))
                     records.append(record)
-                
-            else:
-                for row in rows:
+                except ValueError:
+                    
+            
+        else:
+            if select:
+                raise RuntimeError("select argument requires column headers")                            
+            else:                        
+                for i, row in enumerate(rows, start=1):
                     if not row:
                         continue
                     if types:
                         row = [func(val) for func, val in zip(types, row)]
                     record = tuple(row)
                     records.append(record)
-
-
-    return records
-
-        
+        return records
