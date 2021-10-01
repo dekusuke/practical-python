@@ -25,17 +25,25 @@ def parse_csv(filename, select=None, types=None, has_headers=None, delimiter=Non
                     record = dict(zip(headers, row))
                     records.append(record)
                 except ValueError:
+                    print(f"Row {i}: Couldn't convert {row}")
+                    print(f"Row {i}: invalid literal for int() with base 10: ''")
                     
             
         else:
+            headers = next(rows)
             if select:
                 raise RuntimeError("select argument requires column headers")                            
             else:                        
                 for i, row in enumerate(rows, start=1):
-                    if not row:
-                        continue
-                    if types:
-                        row = [func(val) for func, val in zip(types, row)]
-                    record = tuple(row)
-                    records.append(record)
+                    try:
+                        if not row:
+                            continue
+                        if types:
+                            row = [func(val) for func, val in zip(types, row)]
+                        record = tuple(row)
+                        records.append(record)
+                    except ValueError:
+                        print(f"Row {i}: Couldn't convert {row}")
+                        print(f"Row {i}: Reason invalid literal for int() with base 10: ''")
+                        
         return records
