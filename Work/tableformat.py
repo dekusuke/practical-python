@@ -40,5 +40,25 @@ class HTMLTableFormatter:
         print('<td><td>', end='')
         print('</td><td>'.join(rowdata), end='')
         print('</td></td>')
-                      
+
+class FormatError(Exception):
+    pass
+
+def create_formatter(name):
+
     
+    if name == 'txt':
+        return TextTableFormatter()
+    elif name == 'csv':
+        return CSVTableFormatter()
+    elif name == 'html':
+        return HTMLTableFormatter()
+    else:
+        raise FormatError(f'Unknown table format {name}')
+
+
+def print_table(objects, columns, formatter):
+
+        formatter.headings(columns)
+        for data in objects:
+            formatter.row(str(getattr(data, what)) for what in columns)

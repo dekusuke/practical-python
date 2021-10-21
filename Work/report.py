@@ -28,14 +28,28 @@ def make_report_data(portfolio, prices):
         rows.append(summary)
     return rows
 
-def portfolio_report(portfolio_filename, prices_filename):
+def portfolio_report(portfolio_filename, prices_filename, fmt='html'):
     
     portfolio = read_portfolio(portfolio_filename)
     prices = read_prices(prices_filename)
     report = make_report_data(portfolio, prices)
-    
-    formatter = tableformat.HTMLTableFormatter()
+    '''
+
+    if fmt == 'txt':
+        formatter = tableformat.TextTableFormatter()
+    elif fmt == 'csv':
+        formatter = tableformat.CSVTableFormatter()
+    elif fmt == 'html':
+        formatter = tableformat.HTMLTablFormatter()
+    else:
+        raise RuntimeError(f'Unknown format {fmt}')
+
     print_report(report, formatter)
+    '''
+
+    formatter = tableformat.create_formatter(fmt)
+    print_report(report, formatter)
+
 
 
 def print_report(reportdata, formatter):
