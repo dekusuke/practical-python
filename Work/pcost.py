@@ -3,6 +3,8 @@ import sys
 from report import read_portfolio
 import stock
 def portfolio_cost(filename):
+    
+    '''
     records = read_portfolio(filename)
     total = 0
     for rowno, row in enumerate(records, start=1):        
@@ -12,6 +14,9 @@ def portfolio_cost(filename):
         except ValueError:
             print(f"Row {rowno}: Couldn't convert: {row}")
     print('Total cost:', total)
+    '''
+    portfolio = read_portfolio(filename)
+    return portfolio.total_cost
 
 def main(argv):
     portfolio_cost(argv[1])
