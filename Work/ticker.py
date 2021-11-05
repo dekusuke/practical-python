@@ -16,10 +16,13 @@ def select_columns(rows, indices):
     for row in rows:
         yield [row[index] for index in indices]
 
+        
+'''
 def filter_symbols(rows, names):
     for row in rows:
         if row['name'] in names:
             yield row
+'''
 
 def parse_stock_data(lines):
     rows = csv.reader(lines)
@@ -31,7 +34,7 @@ def parse_stock_data(lines):
 def ticker(portfile, logfile, fmt):
     portfolio = report.read_portfolio(portfile)
     rows = parse_stock_data(follow(logfile))
-    rows = filter_symbols(rows, portfolio)
+    rows = (row for row in rows if row['name'] in portfolio)
     formatter = tableformat.create_formatter(fmt)
     formatter.headings(['Name', 'Price', 'Change'])
     for row in rows:
@@ -45,6 +48,6 @@ def ticker(portfile, logfile, fmt):
 if __name__ == '__main__':
     portfolio = report.read_portfolio('Data/portfolio.csv')
     rows = parse_stock_data(follow('Data/stocklog.csv'))
-    rows = filter_symbols(rows, portfolio)
+    rows = (row for row in rows if row['name'] in portfolio)
     for row in rows:
         print(row)

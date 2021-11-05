@@ -1,13 +1,17 @@
+from typedproperty import typedproperty
+
 class Stock:
-    
-    __slots__ = ('name', '_shares', 'price')
+    name = typedproperty('name', str)
+    shares = typedproperty('shares', int)
+    price = typedproperty('price', float)
     
 
     def __init__(self, name, shares, price):
+
         self.name = name
         self.shares = shares
         self.price = price
-        
+    '''
     @property
     def shares(self):
         return self._shares
@@ -19,6 +23,9 @@ class Stock:
         if not isinstance(value, int):
             raise TypeError('Expected int')
         self._shares = value
+    '''
+
+        
 
     @property
     def cost(self):

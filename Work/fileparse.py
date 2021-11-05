@@ -1,4 +1,6 @@
 import csv
+import logging
+log = logging.getLogger(__name__)
 
 def parse_csv(file, select=None, types=None, has_headers=None, delimiter=None, silence_errors=None):
     '''
@@ -24,12 +26,12 @@ def parse_csv(file, select=None, types=None, has_headers=None, delimiter=None, s
                         row = [func(val) for func, val in zip(types, row)]                
                 record = dict(zip(headers, row))
                 records.append(record)                    
-            except ValueError:
+            except ValueError as e:
                 if silence_errors:
                     continue
                 else:                        
-                    print(f"Row {i}: Couldn't convert {row}")
-                    print(f"Row {i}: invalid literal for int() with base 10: ''")
+                    log.warning("Row %d: Bad row: %s", i, row)
+                    log.debug("Row %d: Reason %s", i, e)
                 
         
     else:
@@ -45,12 +47,12 @@ def parse_csv(file, select=None, types=None, has_headers=None, delimiter=None, s
                         row = [func(val) for func, val in zip(types, row)]
                     
                     records.append(row)                        
-                except ValueError:
+                except ValueError as e:
                     if silence_errors:
                         continue
                     else:                            
-                        print(f"Row {i}: Couldn't convert {row}")
-                        print(f"Row {i}: Reason invalid literal for int() with base 10: ''")
+                        log.warning("Row %d: Bad row: %s", i, row)
+                        log.debug("Row %d: Reason %s", i, e)
         records = dict(records)
                                     
     return records
